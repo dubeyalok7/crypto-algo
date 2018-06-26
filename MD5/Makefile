@@ -7,7 +7,8 @@ OBJ = md5c.o mddriver.o
 
 md5: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
+	rm *.o
 
 clean:
-	rm *.o
+#	rm *.o
 	rm md5

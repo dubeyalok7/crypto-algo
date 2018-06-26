@@ -122,8 +122,7 @@ static void MDTestSuite()
   MDString ("abcdefghijklmnopqrstuvwxyz");
   MDString
     ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-  MDString ("1234567890123456789012345678901234567890\
-      1234567890123456789012345678901234567890");
+  MDString ("12345678901234567890123456789012345678901234567890123456789012345678901234567890");
 }
 
 /* Digests a file and prints the result */
@@ -145,6 +144,7 @@ static void MDFile (filename)
     fclose(file);
 
     printf("MD%d (%s) = ",MD, filename);
+    MDPrint(digest);
     printf("\n");
   }
 }
