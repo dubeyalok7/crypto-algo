@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
   long long emsg[MSG_LIMIT]={0};
-  char dmsg[MSG_LIMIT] = {0};
+  unsigned char dmsg[MSG_LIMIT] = {0};
   char msg[MSG_LIMIT]={'\0'};
   int i;
   size_t len;
