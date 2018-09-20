@@ -1,5 +1,4 @@
 CC=gcc
-DEPS = feistal_algo.h
 OBJ = feistal.o feistal_encrypt.o feistal_decrypt.o keymgmt.o main.o
 CFLAGS = -g
 %.o: %.c $(DEPS)
@@ -9,4 +8,4 @@ feistal: $(OBJ)
 	$(CC) -o  $@ $^ $(CFLAGS)
 
 clean:
-	rm *.o feistal
+	rm *.o feistal *.txt

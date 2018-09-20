@@ -11,22 +11,21 @@ void decrypt_ecb(FILE *infile, FILE *outfile, uint32_t keys[])
   uint32_t left, right;
   size_t ret;
   uint64_t sblock;
-  while(!feof(infile)) {
-    memset(&sblock, 0, sizeof(sblock));
-    ret = fread(&sblock, 1, sizeof(sblock), infile);
-    if(!ret) break;
+  memset(&sblock, 0, sizeof(sblock));
+  while(fread(&sblock, sizeof(sblock), 1, infile)){
     left = (sblock>>32);
     right = (sblock<<32)>>32;
     sblock = decrypt(left, right, keys);
     fwrite(&sblock, 1, sizeof(sblock), outfile);
+    memset(&sblock, 0, sizeof(sblock));
   }
 }
 
 static uint64_t decrypt(uint32_t left, uint32_t right, uint32_t keys[])
 {
   uint32_t i, l1, r1;
-  for(i=ROUNDS -1; i>=0; i--){
-    r1 = left ^ f(right, keys[i]);
+  for(i= 0; i< ROUNDS; i++){
+    r1 = left ^ f(right, keys[ROUNDS-1-i]);
     l1 = right;
     if(i == 0){
       left = r1;

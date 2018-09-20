@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
   char *key;
   int op;
   if((argc==2)&&(!strcmp(argv[1],"-g"))){
-      generateKey();
-      return 0;
+    generateKey();
+    return 0;
   }
 
   if((argc < 5)){
@@ -21,7 +21,8 @@ int main(int argc, char *argv[])
 
   for(int i=1; i< argc ; i+=2){
     if(!strcmp(argv[i],"-i")){
-      infile = fopen(argv[i+1],"r+");
+      printf("Input file: %s\n", argv[i+1]);
+      infile = fopen(argv[i+1],"r");
       if(!infile){
         printf("Error: in-valid file name\n");
         help();
@@ -29,14 +30,17 @@ int main(int argc, char *argv[])
       }
     }
     else if(!strcmp(argv[i],"-o")){
+      printf("Output File: %s\n",argv[i+1]);
       outfile = fopen(argv[i+1],"w+");
     }
     else if(!strcmp(argv[i],"-e")|| !strcmp(argv[i],"-d")){
-      if(argv[i][1] =='e')
+      if(argv[i][1] =='e'){
+        printf("Encrypting the file\n");
         op = ENCRYPT;
-      else if(argv[i][1] =='d')
+      }else if(argv[i][1] =='d'){
         op = DECRYPT;
-      else{
+        printf("Decrypting the file\n");
+      }else{
         help();
         return 0;
       }

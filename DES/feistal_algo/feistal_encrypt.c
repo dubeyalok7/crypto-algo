@@ -9,14 +9,13 @@ void encrypt_ecb(FILE *infile, FILE *outfile, uint32_t keys[])
   uint32_t left, right;
   size_t ret;
   uint64_t sblock;
-  while(!feof(infile)) {
-    memset(&sblock,0,sizeof(sblock));
-    ret = fread(&sblock, sizeof(sblock)+1 , 1, infile);
-    if(!ret) break;
+  memset(&sblock,0,sizeof(sblock));
+  while(fread(&sblock, sizeof(sblock), 1, infile)){    
     left = (sblock>>32);
     right = ((sblock<<32)>>32);
     sblock = encrypt(left, right, keys);
     fwrite(&sblock,1,sizeof(sblock), outfile);
+    memset(&sblock,0,sizeof(sblock));
   }
 }
 
