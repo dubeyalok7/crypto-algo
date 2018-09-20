@@ -10,7 +10,7 @@ enum OPERATION{
 };
 
 void help();
-uint32_t f(uint32_t block, uint32_t key);
+uint32_t xor_fun(uint32_t block, uint32_t key);
 void encrypt_ecb(FILE *infile, FILE *outfile, uint32_t keys[]);
 void decrypt_ecb(FILE *infile, FILE *outfile, uint32_t keys[]);
 void fesital(FILE *ofile, FILE *ifile, int op);

@@ -23,7 +23,7 @@ static uint64_t encrypt(uint32_t left, uint32_t right, uint32_t keys[])
 {
   uint32_t i, l1, r1;
   for(i=0; i<ROUNDS; i++) {
-    r1 = left ^ f(right, keys[i]);
+    r1 = left ^ xor_fun(right, keys[i]);
     l1 = right;
     if(i == (ROUNDS -1)) {
       left = r1;

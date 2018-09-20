@@ -25,9 +25,9 @@ static uint64_t decrypt(uint32_t left, uint32_t right, uint32_t keys[])
 {
   uint32_t i, l1, r1;
   for(i= 0; i< ROUNDS; i++){
-    r1 = left ^ f(right, keys[ROUNDS-1-i]);
+    r1 = left ^ xor_fun(right, keys[ROUNDS-1-i]);
     l1 = right;
-    if(i == 0){
+    if(i == ROUNDS -1){
       left = r1;
       right = l1;
     } else {

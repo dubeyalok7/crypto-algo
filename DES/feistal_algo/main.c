@@ -35,11 +35,11 @@ int main(int argc, char *argv[])
     }
     else if(!strcmp(argv[i],"-e")|| !strcmp(argv[i],"-d")){
       if(argv[i][1] =='e'){
-        printf("Encrypting the file\n");
+        printf("Encrypting the file...\n");
         op = ENCRYPT;
       }else if(argv[i][1] =='d'){
         op = DECRYPT;
-        printf("Decrypting the file\n");
+        printf("Decrypting the file...\n");
       }else{
         help();
         return 0;

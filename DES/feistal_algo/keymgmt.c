@@ -9,20 +9,19 @@ static int inRange(char ch){
 }
 
 int generateSubKeys(char *key, uint32_t keys[]){
+  int k=0;
   if(key==NULL)
     return 0;
-  int k=0;
-
-  for(int i=0;(i<ROUNDS) && (key[k] != '\0');i+=2, k++){
+  for(int i=0;(i<ROUNDS) &&((key[k] != '\0')||(key[k] != '\n'));i+=2, k++){
     keys[i] = (uint32_t)key[k]^keys[i];
     keys[i+1] = (uint32_t)key[k]^keys[i+1];
-  } 
-
-  /*
-  for(int i=0;i<ROUNDS;i++)
-    printf("%x ", keys[i]);
-  printf("\n"); */
+  }
   return 1;
+}
+
+uint32_t xor_fun(uint32_t block, uint32_t key)
+{
+  return block^key;
 }
 
 void generateKey(){
