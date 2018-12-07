@@ -195,11 +195,27 @@ extern int hmacResult(HMACContext *context, uint8_t digest[USHAMaxHashSize]);
  * HKDF HMAC-based Extract-and-Expand Key Derivation Function,
  * RFC 5869,  for all SHAs.
  */
+extern int hkdf(SHAVersion whichSha, const unsigned char *salt,
+        int salt_len, const unsigned char *ikm, int ikm_len,
+        const unsigned char *info, int info_len,
+        uint8_t okm[ ], int okm_len);
+extern int hkdfExtract(SHAVersion whichSha, const unsigned char *salt,
+        int salt_len, const unsigned char *ikm,
+        int ikm_len, uint8_t prk[USHAMaxHashSize]);
+extern int hkdfExpand(SHAVersion whichSha, const uint8_t prk[ ],
+        int prk_len, const unsigned char *info,
+        int info_len, uint8_t okm[ ], int okm_len);
+/*
+ * HKDF HMAC-based Extract-and-Expand Key Derivation Function,
+ * RFC 5869, for all SHAs.
+ * This interface allows any length of text input to be used.
+ */
+
 extern int hkdfReset(HKDFContext *context, enum SHAVersion whichSha,
         const unsigned char *salt, int salt_len);
 extern int hkdfInput(HKDFContext *context, const unsigned char *ikm,
         int ikm_len);
-extern int kkdfFinalBits(HKDFContext *context, uint8_t ikm_bits,
+extern int hkdfFinalBits(HKDFContext *context, uint8_t ikm_bits,
         unsigned int ikm_bit_count);
 extern int hkdfResult(HKDFContext *context,
         uint8_t prk[USHAMaxHashSize],
