@@ -1,7 +1,7 @@
 CC=gcc
 DEPS = sha.h sha_private.h
 OBJ = sha1.o sha224_256.o sha384_512.o usha.o hmac.o hkdf.o main.o
-CFLAGS = -Wall
+CFLAGS = -Wall -Werror
 %.o: %.c $(DEPS)
 	$(CC) -g -c $(CFLAGS) -o $@ $<
 
