@@ -1,226 +1,45 @@
 #ifndef _SHA_H_
 #define _SHA_H_
-
-#include <stdint.h>
-
-#ifndef _SHA_enum_
-#define _SHA_enum_
-
-enum {
-    shaSuccess = 0,
-    shaNull,
-    shaInputTooLong,
-    shaStateError,
-    shaBadParam
-};
-#endif
-
-enum {
-    SHA1_Message_Block_Size = 64,
-    SHA224_Message_Block_Size = 64,
-    SHA256_Message_Block_Size = 64,
-    SHA384_Message_Block_Size = 128,
-    SHA512_Message_Block_Size = 128,
-    USHA_Max_Message_Block_Size = SHA512_Message_Block_Size,
-
-    SHA1HashSize = 20,
-    SHA224HashSize = 28,
-    SHA256HashSize = 32,
-    SHA384HashSize = 48,
-    SHA512HashSize = 64,
-    USHAMaxHashSize = SHA512HashSize,
-
-    SHA1HashSizeBits = 160,
-    SHA224HashSizeBits = 224,
-    SHA256HashSizeBits = 256,
-    SHA384HashSizeBits = 384,
-    SHA512HashSizeBits = 512,
-    USHAMaxHashSizeBits = SHA512HashSizeBits
+//SHA Constant for 224 -256
+static const uint32_t K32[64] = {
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b,
+    0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,
+    0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7,
+    0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
+    0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152,
+    0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+    0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+    0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819,
+    0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08,
+    0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f,
+    0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-typedef enum SHAVersion {
-    SHA1, SHA224, SHA256, SHA384, SHA512
-} SHAVersion;
+//SHA Constant 384-512
+const uint64_t K64[80]=
+{
 
-typedef struct SHA1Context {
-    uint32_t Intermediate_Hash[SHA1HashSize/4]; /* Message Digest*/
-
-    uint32_t Length_High;       /* Message length in bits */
-    uint32_t Length_Low;        /* Message length in bits */
-
-    int_least16_t Message_Block_Index;  /* Message_Block array index */
-    /* 512 bit message blocks */
-    uint8_t Message_Block[SHA1_Message_Block_Size];
-
-    int Computed;
-    int Corrupted;
-}SHA1Context;
-
-typedef struct SHA256Context {
-    uint32_t Intermediate_Hash[SHA256HashSize/4];
-
-    uint32_t Length_High;
-    uint32_t Length_Low;
-
-    int_least16_t Message_Block_Index;
-
-    uint8_t Message_Block[SHA256_Message_Block_Size];
-
-    int Computed;
-    int Corrupted;
-}SHA256Context;
-
-typedef struct SHA512Context {
-#ifdef USE_32BIT_ONLY
-    uint32_t Intermediate_Hash[SHA512HashSize/4]; /*Message digest */
-    uint32_t Lenght[4];
-#else  /* !USE_32BIT_ONLY */
-    uint64_t Intermediate_Hash[SHA512HashSize/8];
-    uint64_t Length_High, Length_Low;
+    0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
+    0x3956c25bf348b538, 0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118,
+    0xd807aa98a3030242, 0x12835b0145706fbe, 0x243185be4ee4b28c, 0x550c7dc3d5ffb4e2,
+    0x72be5d74f27b896f, 0x80deb1fe3b1696b1, 0x9bdc06a725c71235, 0xc19bf174cf692694,
+    0xe49b69c19ef14ad2, 0xefbe4786384f25e3, 0x0fc19dc68b8cd5b5, 0x240ca1cc77ac9c65,
+    0x2de92c6f592b0275, 0x4a7484aa6ea6e483, 0x5cb0a9dcbd41fbd4, 0x76f988da831153b5,
+    0x983e5152ee66dfab, 0xa831c66d2db43210, 0xb00327c898fb213f, 0xbf597fc7beef0ee4,
+    0xc6e00bf33da88fc2, 0xd5a79147930aa725, 0x06ca6351e003826f, 0x142929670a0e6e70,
+    0x27b70a8546d22ffc, 0x2e1b21385c26c926, 0x4d2c6dfc5ac42aed, 0x53380d139d95b3df,
+    0x650a73548baf63de, 0x766a0abb3c77b2a8, 0x81c2c92e47edaee6, 0x92722c851482353b,
+    0xa2bfe8a14cf10364, 0xa81a664bbc423001, 0xc24b8b70d0f89791, 0xc76c51a30654be30,
+    0xd192e819d6ef5218, 0xd69906245565a910, 0xf40e35855771202a, 0x106aa07032bbd1b8,
+    0x19a4c116b8d2d0c8, 0x1e376c085141ab53, 0x2748774cdf8eeb99, 0x34b0bcb5e19b48a8,
+    0x391c0cb3c5c95a63, 0x4ed8aa4ae3418acb, 0x5b9cca4f7763e373, 0x682e6ff3d6b2b8a3,
+    0x748f82ee5defb2fc, 0x78a5636f43172f60, 0x84c87814a1f0ab72, 0x8cc702081a6439ec,
+    0x90befffa23631e28, 0xa4506cebde82bde9, 0xbef9a3f7b2c67915, 0xc67178f2e372532b,
+    0xca273eceea26619c, 0xd186b8c721c0c207, 0xeada7dd6cde0eb1e, 0xf57d4f7fee6ed178,
+    0x06f067aa72176fba, 0x0a637dc5a2c898a6, 0x113f9804bef90dae, 0x1b710b35131c471b,
+    0x28db77f523047d84, 0x32caab7b40c72493, 0x3c9ebe0a15c9bebc, 0x431d67c49c100d4c,
+    0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817
+};
 #endif
-
-    int_least16_t Message_Block_Index;  /* Message_Block array index */
-    /* 1024-bit message block */
-
-    uint8_t Message_Block[SHA512_Message_Block_Size];
-
-    int Computed;
-    int Corrupted;
-}SHA512Context;
-
-typedef struct SHA256Context SHA224Context;
-typedef struct SHA512Context SHA384Context;
-
-typedef struct USHAContext {
-    int whichSha;
-    union {
-        SHA1Context sha1Context;
-        SHA224Context sha224Context;
-        SHA256Context sha256Context;
-        SHA384Context sha384Context;
-        SHA512Context sha512Context;
-    }ctx;
-}USHAContext;
-
-typedef struct HMACContext {
-    int whichSha;               /* which SHA us being used */
-    int hashSize;               /* hash size of SHA being used */
-    int blockSize;              /* block size of SHA being used */
-    USHAContext shaContext;     /* SHA Context  */
-
-    unsigned char k_opad[USHA_Max_Message_Block_Size]; /* outer padding - key XORD with opad */
-
-    int Computed;               /* is the max computed */
-    int Corrupted;              /* cumulative corruption code */
-}HMACContext;
-
-typedef struct HKDFContext {
-    int whichSha;
-    HMACContext hmacContext;
-    int hashSize;
-
-    unsigned char prk[USHAMaxHashSize];
-
-    int Computed;
-    int Corrupted;
-}HKDFContext;
-
-/* SHA -1 */
-extern int SHA1Reset(SHA1Context *);
-extern int SHA1Input(SHA1Context *, const uint8_t *bytes, unsigned int bytecount);
-extern int SHA1FinalBits(SHA1Context *, uint8_t bits, unsigned int bit_count);
-extern int SHA1Result(SHA1Context *, uint8_t Message_Digest[SHA1HashSize]);
-
-/* SHA-224 */
-extern int SHA224Reset(SHA224Context *);
-extern int SHA224Input(SHA224Context *, const uint8_t *bytes, unsigned int bytecount);
-extern int SHA224FinalBits(SHA224Context *, uint8_t bits, unsigned int bit_count);
-extern int SHA224Result(SHA224Context *, uint8_t Message_Digest[SHA224HashSize]);
-
-/* SHA-256 */
-extern int SHA256Reset(SHA256Context *);
-extern int SHA256Input(SHA256Context *, const uint8_t *bytes, unsigned int bytecount);
-extern int SHA256FinalBits(SHA256Context *, uint8_t bits, unsigned int bit_count);
-extern int SHA256Result(SHA256Context *, uint8_t Message_Digest[SHA256HashSize]);
-
-/* SHA-384 */
-extern int SHA384Reset(SHA384Context *);
-extern int SHA384Input(SHA384Context *, const uint8_t *bytes, unsigned int bytecount);
-extern int SHA384FinalBits(SHA384Context *, uint8_t bits, unsigned int bit_count);
-extern int SHA384Result(SHA384Context *, uint8_t Message_Digest[SHA384HashSize]);
-
-/* SHA-512 */
-extern int SHA512Reset(SHA512Context *);
-extern int SHA512Input(SHA512Context *, const uint8_t *bytes, unsigned int bytecount);
-extern int SHA512FinalBits(SHA512Context *, uint8_t bits, unsigned int bit_count);
-extern int SHA512Result(SHA512Context *, uint8_t Message_Digest[SHA512HashSize]);
-
-/* Unified SHA functions, chosen by which SHA */
-extern int USHAReset(USHAContext *context, SHAVersion whichSha);
-extern int USHAInput(USHAContext *context, const uint8_t *bytes, unsigned int bytecount);
-extern int USHAFinalBits(USHAContext *context, uint8_t bits, unsigned int bit_count);
-extern int USHAResult(USHAContext *context, uint8_t Message_Digest[USHAMaxHashSize]);
-extern int USHABlockSize(enum SHAVersion whichSha);
-extern int USHAHashSize(enum SHAVersion whichSha);
-extern int USHAHashSizeBits(enum SHAVersion whichSha);
-extern const char *USHAHashName(enum SHAVersion whichSha);
-
-/*
- * HMAC Keyed-Hashing for Message Authenticaton, RFC 2104,
- * for all SHAs.
- * This interface allows a fixed-length text input to be used.
- */
-extern int hmac(SHAVersion whichSha,    /* which SHA algorithm to use */
-        const unsigned char *text,      /* pointer to data stream   */
-        int text_len,                   /* length of data stream    */
-        const unsigned char *key,       /* pointer to authentication key */
-        int key_len,                    /* length of authentication key */
-        uint8_t digest[USHAMaxHashSize]); /* caller digest to fill in */
-
-/*
- * HMAC Keyed-Hashing for Message Authenticaton, RFC 2104,
- * for all SHAs.
- * This interface allows any length of text input to be used.
- */
-
-extern int hmacReset(HMACContext *context, enum SHAVersion whichSha,
-        const unsigned char *key, int key_len);
-extern int hmacInput(HMACContext *context, const unsigned char *text,
-        int text_len);
-extern int hmacFinalBits(HMACContext *context, uint8_t bits,
-        unsigned int bit_count);
-extern int hmacResult(HMACContext *context, uint8_t digest[USHAMaxHashSize]);
-
-/*
- * HKDF HMAC-based Extract-and-Expand Key Derivation Function,
- * RFC 5869,  for all SHAs.
- */
-extern int hkdf(SHAVersion whichSha, const unsigned char *salt,
-        int salt_len, const unsigned char *ikm, int ikm_len,
-        const unsigned char *info, int info_len,
-        uint8_t okm[ ], int okm_len);
-extern int hkdfExtract(SHAVersion whichSha, const unsigned char *salt,
-        int salt_len, const unsigned char *ikm,
-        int ikm_len, uint8_t prk[USHAMaxHashSize]);
-extern int hkdfExpand(SHAVersion whichSha, const uint8_t prk[ ],
-        int prk_len, const unsigned char *info,
-        int info_len, uint8_t okm[ ], int okm_len);
-/*
- * HKDF HMAC-based Extract-and-Expand Key Derivation Function,
- * RFC 5869, for all SHAs.
- * This interface allows any length of text input to be used.
- */
-
-extern int hkdfReset(HKDFContext *context, enum SHAVersion whichSha,
-        const unsigned char *salt, int salt_len);
-extern int hkdfInput(HKDFContext *context, const unsigned char *ikm,
-        int ikm_len);
-extern int hkdfFinalBits(HKDFContext *context, uint8_t ikm_bits,
-        unsigned int ikm_bit_count);
-extern int hkdfResult(HKDFContext *context,
-        uint8_t prk[USHAMaxHashSize],
-        const unsigned char *info, int info_len,
-        uint8_t okm[USHAMaxHashSize], int okm_len);
-
-#endif /* _SHA_H_*/
-
