@@ -1,6 +1,7 @@
 #ifndef _SHA_H_
 #define _SHA_H
-
+#include <stdint.h>
+#include <string.h>
 #ifndef __enum__
 #define __enum__
 enum {
@@ -27,21 +28,21 @@ enum {
 
 
 enum {
-    sha256_Message_Block_Size       = 64,
-    sha256_Hash_Size                = 32,
-    sha256_Hash_Size_Bits           = 256,
+    SHA256_Message_Block_Size       = 64,
+    SHA256_Hash_Size                = 32,
+    SHA256_Hash_Size_Bits           = 256,
 };
 
 typedef struct SHA256Context
 {
-    uint32_t h[sha256_Hash_Size/4]; // intermediate hash value
+    uint32_t h[SHA256_Hash_Size/4]; // intermediate hash value
 
     uint32_t hl;
     uint32_t ll;
 
     int_least16_t msg_block_idx;
 
-    uint8_t msg_block[sha256_Message_Block_Size];
+    uint8_t msg_block[SHA256_Message_Block_Size];
 
     int Computed;
     int Corrupted;
@@ -50,6 +51,6 @@ typedef struct SHA256Context
 
 extern int sha256Init(SHA256Context *);
 extern int sha256Input(SHA256Context *, const uint8_t *bytes, unsigned int byte_count);
-extern int SHA256FinalBits(SHA256Context *, uint8_t bits, unsigned int bit_count);
-extern int sha256Result(SHA256Context *, uint8_t msgDigest[sha256_Hash_Size]);
+extern int sha256FinalizeBits(SHA256Context *, uint8_t bits, unsigned int bit_count);
+extern int sha256Result(SHA256Context *, uint8_t msgDigest[SHA256_Hash_Size]);
 #endif

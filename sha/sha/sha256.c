@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include <string.h>
 #include "sha256.h"
 
 static uint8_t add_tmp;
@@ -27,9 +25,9 @@ static void sha256PadMsg(SHA256Context *ctx, uint8_t pad_byte)
      * block.
      */
 
-    if(ctx->msg_block_idx >= (sha256_Message_Block_Size - 8)){
+    if(ctx->msg_block_idx >= (SHA256_Message_Block_Size - 8)){
         ctx->msg_block[ctx->msg_block_idx++] = pad_byte;
-        while(ctx->msg_block_idx < sha256_Message_Block_Size)
+        while(ctx->msg_block_idx < SHA256_Message_Block_Size)
             ctx->msg_block[ctx->msg_block_idx++] = 0;
         sha256Process(ctx);
     } else
@@ -119,7 +117,7 @@ static void sha256Process(SHA256Context *ctx)
 static void sha256Finalize(SHA256Context *ctx, uint8_t pad_byte)
 {
     sha256PadMsg(ctx, pad_byte);
-    for(int i=0; i< sha256_Message_Block_Size; ++i){
+    for(int i=0; i< SHA256_Message_Block_Size; ++i){
         ctx->msg_block[i] = 0;
     }
     ctx->ll = ctx->hl = 0;
@@ -170,7 +168,7 @@ int sha256Input(SHA256Context *ctx, const uint8_t *msg, unsigned int len)
     while(len--){
         ctx->msg_block[ctx->msg_block_idx++] = *msg;
         if((SHA256_add_len(ctx, 8) == SHA_SUCCESS) &&
-             (ctx->msg_block_idx == sha256_Message_Block_Size))
+             (ctx->msg_block_idx == SHA256_Message_Block_Size))
             sha256Process(ctx);
         ++msg;
     }
@@ -204,7 +202,7 @@ int sha256FinalizeBits(SHA256Context *ctx, uint8_t msg_bits, unsigned int len)
     return ctx->Corrupted;
 }
 
-extern int sha256Result(SHA256Context *ctx, uint8_t msgDigest[sha256_Hash_Size])
+extern int sha256Result(SHA256Context *ctx, uint8_t msgDigest[SHA256_Hash_Size])
 {
     if(!ctx) return SHA_NULL;
     if(!msgDigest) return SHA_NULL;
@@ -212,7 +210,7 @@ extern int sha256Result(SHA256Context *ctx, uint8_t msgDigest[sha256_Hash_Size])
     if(ctx->Computed) return SHA_ERR;
 
 
-    for(int i = 0; i < sha256_Hash_Size; ++i)
+    for(int i = 0; i < SHA256_Hash_Size; ++i)
     {
         msgDigest[i] = (uint8_t) (ctx->h[i>>2]>> 8*(3-(i&0x03)));
     }
