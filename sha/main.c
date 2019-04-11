@@ -33,6 +33,7 @@ void init_sha_256(char *infile)
   for(int i = 0; i < SHA256_Hash_Size; ++i){
     printf("%.2x ", msgDigest[i]);
   }
+  printf("\n");
   fclose(fp);  
 }
 

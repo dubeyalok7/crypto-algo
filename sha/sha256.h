@@ -18,8 +18,8 @@ enum {
 #define SHA256_RTOL(bits, word)   (((word)<<(bits))| ((word)>>(32-(bits))))
 
 // Following x, y and z are word
-#define sha256_CH(x, y, z)        (((x) & (y)) ^ ((~(x)) & (z)))
-#define sha256_MAJ(x, y, z)       (((x) & (y)) ^ ((y) & (z)) ^ ((z) & (x)))
+#define SHA256_CH(x, y, z)        (((x) & (y)) ^ ((~(x)) & (z)))
+#define SHA256_MAJ(x, y, z)       (((x) & (y)) ^ ((y) & (z)) ^ ((z) & (x)))
 
 #define BSIG0(x)                  (SHA256_ROTR(2, x) ^ SHA256_ROTR(13, x) ^ SHA256_ROTR(22, x))
 #define BSIG1(x)                  (SHA256_ROTR(6, x) ^ SHA256_ROTR(11, x) ^ SHA256_ROTR(25, x))

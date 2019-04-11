@@ -4,10 +4,7 @@ static uint8_t add_tmp;
 #define SHA256_add_len(ctx, lenn)                \
         (add_tmp = (ctx)->ll, (ctx)->Corrupted = \
         (((ctx)->ll += (len) < add_tmp) &&       \
-        (++(ctx)->hl == 0) ? SHA_WRN :\
-        (ctx)->Corrupted))
-
-
+        (++(ctx)->hl == 0) ? SHA_WRN : (ctx)->Corrupted))
 
 // Local functiona prototype 
 static void sha256PadMsg(SHA256Context *ctx, uint8_t pad_byte);
@@ -92,8 +89,8 @@ static void sha256Process(SHA256Context *ctx)
     h = ctx->h[7];
 
     for(int t = 0; t< 64; ++t) {
-        tmp1 = h + SSIG1(e) + sha256_CH(e, f, g) + k[t] + w[t];
-        tmp2 = SSIG0(a) + sha256_MAJ(a, b, c);
+        tmp1 = h + SSIG1(e) + SHA256_CH(e, f, g) + k[t] + w[t];
+        tmp2 = SSIG0(a) + SHA256_MAJ(a, b, c);
         h = g;
         g = f;
         f = e;
@@ -112,6 +109,8 @@ static void sha256Process(SHA256Context *ctx)
     ctx->h[5] += f;
     ctx->h[6] += g;
     ctx->h[7] += h;
+
+    ctx->msg_block_idx = 0;
 }
 
 static void sha256Finalize(SHA256Context *ctx, uint8_t pad_byte)
@@ -135,7 +134,8 @@ int sha256Init(SHA256Context *ctx)
      * first thirty-two bits of the fractional parts of the square roots of
      * the first eight prime numbers.
      */
-    memset(ctx, 0, sizeof(*ctx));
+    if(NULL == ctx) 
+        return SHA_NULL;
     ctx->hl = ctx->ll = 0;
     ctx->msg_block_idx = 0;
 
@@ -167,8 +167,7 @@ int sha256Input(SHA256Context *ctx, const uint8_t *msg, unsigned int len)
 
     while(len--){
         ctx->msg_block[ctx->msg_block_idx++] = *msg;
-        if((SHA256_add_len(ctx, 8) == SHA_SUCCESS) &&
-             (ctx->msg_block_idx == SHA256_Message_Block_Size))
+        if((SHA256_add_len(ctx, 8) == SHA_SUCCESS) && (ctx->msg_block_idx == SHA256_Message_Block_Size))
             sha256Process(ctx);
         ++msg;
     }
@@ -207,12 +206,11 @@ extern int sha256Result(SHA256Context *ctx, uint8_t msgDigest[SHA256_Hash_Size])
     if(!ctx) return SHA_NULL;
     if(!msgDigest) return SHA_NULL;
     if(ctx->Corrupted) return ctx->Corrupted;
-    if(ctx->Computed) return SHA_ERR;
-
+    if(!ctx->Computed)
+        sha256Finalize(ctx, 0x80);
 
     for(int i = 0; i < SHA256_Hash_Size; ++i)
-    {
         msgDigest[i] = (uint8_t) (ctx->h[i>>2]>> 8*(3-(i&0x03)));
-    }
+
     return SHA_SUCCESS;
 }
