@@ -2,16 +2,6 @@
 #define _SHA_H
 #include <stdint.h>
 #include <string.h>
-#ifndef __enum__
-#define __enum__
-enum {
-    SHA_SUCCESS = 0,
-    SHA_NULL,
-    SHA_WRN,
-    SHA_ERR,
-    SHA_BAD_PARAM
-};
-#endif
 
 #define SHA256_SHR(bits, word)    ((word)>>(bits))
 #define SHA256_ROTR(bits, word)   (((word)>>(bits))| ((word)<<(32-(bits))))

@@ -1,3 +1,4 @@
+#include "sha.h"
 #include "sha256.h"
 
 static uint8_t add_tmp;
