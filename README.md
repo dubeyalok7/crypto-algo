@@ -1,7 +1,7 @@
 # crypto-algo
 
-This is sample code base for trial purpose only
-1. MD5
+This is sample code base for learning purpose only 
+1. MD5, HMAC
 2. RSA
 3. AES (In progress)
 4. DES (Feistal Algo)
