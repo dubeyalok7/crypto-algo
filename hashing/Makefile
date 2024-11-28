@@ -1,14 +1,13 @@
 CC=gcc
 DEPS = global.h md5.h
-OBJ = md5c.o mddriver.o 
+OBJ = md5c.o mddriver.o hmac.o main.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -g -o $@ $< $(CFLAGS)
 
-md5: $(OBJ)
+hash: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
-	rm *.o
 
 clean:
-#	rm *.o
-	rm md5
+	rm *.o
+	rm hash

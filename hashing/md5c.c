@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "global.h"
 #include "md5.h"
 

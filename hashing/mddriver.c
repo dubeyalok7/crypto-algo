@@ -34,7 +34,7 @@ void help()
        *   \n");
 }
 
-int main(argc, argv)
+int main_md5(argc, argv)
   int argc;
   char *argv[];
 {
@@ -51,8 +51,7 @@ int main(argc, argv)
        MDFile(argv[i]);
    }
   }else{
-    help();
-     MDFilter();
+    help();    
   }
   return 0;
 }

@@ -6,6 +6,9 @@
  * been defined with C compiler flags.
  */
 
+#ifndef _GLOBAL_H_
+#define _GLOBAL_H_
+
 #ifndef PROTOTYPES
 #define PROTOTYPES 0
 #endif
@@ -29,3 +32,7 @@ typedef unsigned long int UINT4;
 #else
 #define PROTO_LIST(list) ()
 #endif
+
+int main_md5();
+int main_hmac();
+#endif // _GLOBAL_H_
